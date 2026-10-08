@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101916">
+  <title>PulseScope | Sentiment workspace</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+    :root{color-scheme:dark;--bg:#101916;--sidebar:#121d19;--surface:#18231f;--surface-2:#1e2b25;--line:#2d3b34;--text:#eef3ed;--muted:#a1ada3;--faint:#718077;--green:#78d6a1;--green-deep:#2c9a68;--red:#f18478;--amber:#e3bd72;--blue:#9cb9cd;--shadow:0 20px 60px #050a0870;--radius:10px}
+    [data-theme="light"]{color-scheme:light;--bg:#f2f4ef;--sidebar:#f7f8f4;--surface:#fff;--surface-2:#f5f7f2;--line:#dfe5dd;--text:#1d2922;--muted:#5e6b62;--faint:#87948a;--green:#26794f;--green-deep:#2c9a68;--red:#c55148;--amber:#9b742b;--blue:#56758b;--shadow:0 20px 60px #23362917}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.app{min-height:100vh;display:grid;grid-template-columns:236px minmax(0,1fr)}
+    .sidebar{background:var(--sidebar);border-right:1px solid var(--line);padding:24px 15px 17px;display:flex;flex-direction:column;min-height:100vh;position:sticky;top:0;height:100vh}.brand{display:flex;align-items:center;gap:11px;padding:0 10px 28px}.brand-mark{width:31px;height:31px;border-radius:9px;background:var(--green);display:grid;place-items:center;color:#102219}.brand-mark svg{width:20px;height:20px}.brand-name{font:800 15px 'Manrope',sans-serif;letter-spacing:.1px}.brand-name span{color:var(--green)}.workspace-label{font:500 10px 'DM Mono',monospace;color:var(--faint);letter-spacing:1.4px;text-transform:uppercase;padding:0 11px 9px}.nav{display:grid;gap:4px}.nav button,.side-bottom button{width:100%;height:39px;border:0;border-radius:7px;color:var(--muted);background:transparent;display:flex;align-items:center;gap:12px;padding:0 11px;text-align:left;transition:.16s}.nav button:hover,.side-bottom button:hover{background:var(--surface-2);color:var(--text)}.nav button.active{background:#78d6a119;color:var(--green);font-weight:600}.nav svg,.side-bottom svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.nav .nav-label{flex:1}.side-spacer{flex:1}.model-state{margin:0 6px 15px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}.state-top{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600}.state-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px color-mix(in srgb,var(--amber) 14%,transparent)}.state-caption{color:var(--faint);font-size:11px;line-height:1.45;margin:7px 0 0}.side-bottom{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:3px}.theme-button{justify-content:space-between!important}.theme-left{display:flex;align-items:center;gap:12px}.theme-switch{width:29px;height:16px;border-radius:99px;background:var(--line);padding:2px}.theme-switch:after{content:'';width:12px;height:12px;border-radius:50%;background:var(--muted);display:block;transition:.18s}.theme-switch.on{background:var(--green-deep)}.theme-switch.on:after{transform:translateX(13px);background:white}
+    .main{min-width:0;padding:0 36px 48px}.topbar{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}.crumb{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px}.crumb b{color:var(--text);font-weight:600}.top-actions{display:flex;align-items:center;gap:9px}.date-stamp{font:11px 'DM Mono',monospace;color:var(--muted);padding-right:9px}.button{height:36px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--text);padding:0 12px;font-size:12px;font-weight:600;transition:.15s}.button:hover{border-color:var(--faint);background:var(--surface-2)}.button.primary{border-color:var(--green);color:#11231a;background:var(--green);font-weight:700}.button.primary:hover{filter:brightness(1.05)}.button.subtle{background:transparent}.button:disabled{opacity:.5;cursor:not-allowed}.button svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.page{max-width:1380px;margin:0 auto}.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:29px 0 22px}.eyebrow{color:var(--green);font:500 10px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:1.35px;margin:0 0 9px}.page-head h1{font:700 25px 'Manrope',sans-serif;letter-spacing:0;margin:0}.page-head p{color:var(--muted);margin:7px 0 0;font-size:13px;line-height:1.5}.badge{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:7px 10px;font-size:11px}.badge-dot{width:6px;height:6px;background:var(--faint);border-radius:50%}.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);margin-bottom:20px}.metric{padding:16px 18px;min-width:0;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric-label{font:500 10px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.8px;color:var(--faint)}.metric-value{font:700 23px 'Manrope',sans-serif;margin-top:8px;white-space:nowrap}.metric-note{font-size:11px;color:var(--muted);margin-top:4px}.metric-value.green{color:var(--green)}.metric-value.red{color:var(--red)}.metric-value.amber{color:var(--amber)}.grid-main{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(320px,.94fr);gap:17px}.panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}.panel-title{font:650 13px 'Manrope',sans-serif}.panel-subtitle{font-size:11px;color:var(--faint);margin-top:3px}.panel-body{padding:18px}.sentiment-layout{display:flex;align-items:center;justify-content:center;gap:38px;min-height:220px}.donut{width:174px;height:174px;flex:none;position:relative;border-radius:50%;display:grid;place-items:center}.donut:after{content:'';position:absolute;inset:25px;border-radius:50%;background:var(--surface)}.donut-center{position:relative;z-index:1;text-align:center}.donut-total{font:700 28px 'Manrope',sans-serif}.donut-label{font-size:10px;color:var(--muted);margin-top:2px}.legend{display:grid;gap:15px;min-width:120px}.legend-row{display:grid;grid-template-columns:9px 1fr auto;align-items:center;gap:9px;font-size:12px}.legend-dot{width:8px;height:8px;border-radius:2px}.legend-name{color:var(--muted)}.legend-count{font:500 11px 'DM Mono',monospace}.sent-pos{color:var(--green)}.sent-neg{color:var(--red)}.sent-neu{color:var(--amber)}.dist-list{display:grid;gap:18px}.dist-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:7px}.dist-head span:last-child{font:11px 'DM Mono',monospace;color:var(--muted)}.track{height:6px;border-radius:8px;background:var(--surface-2);overflow:hidden}.fill{height:100%;border-radius:8px;min-width:0;transition:width .35s}.fill.positive{background:var(--green)}.fill.negative{background:var(--red)}.fill.neutral{background:var(--amber)}.lower-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:17px;margin-top:17px}.table-wrap{overflow-x:auto}.data-table{width:100%;border-collapse:collapse;text-align:left}.data-table th{font:500 10px 'DM Mono',monospace;letter-spacing:.65px;text-transform:uppercase;color:var(--faint);padding:11px 13px;border-bottom:1px solid var(--line);white-space:nowrap}.data-table td{padding:12px 13px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:middle}.data-table tr:last-child td{border-bottom:0}.comment-cell{max-width:430px;color:var(--text);line-height:1.45}.muted-cell{color:var(--muted);white-space:nowrap}.sentiment-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.25px;white-space:nowrap}.sentiment-chip.positive{background:#78d6a119;color:var(--green)}.sentiment-chip.negative{background:#f1847819;color:var(--red)}.sentiment-chip.neutral{background:#e3bd7219;color:var(--amber)}.empty{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px}.empty-mark{width:45px;height:45px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;color:var(--green);margin-bottom:14px;background:var(--surface-2)}.empty-mark svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.5}.empty h2{font:650 16px 'Manrope',sans-serif;margin:0}.empty p{max-width:360px;color:var(--muted);font-size:12px;line-height:1.55;margin:8px 0 17px}.empty.small{min-height:145px}.empty.small p{margin-bottom:0}.empty-icon{font:16px 'DM Mono',monospace;color:var(--faint)}
+    .analyze-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:17px;align-items:start}.form-panel{padding:19px}.field-label{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:9px}.field-hint{font-size:11px;color:var(--faint);font-weight:400}.textarea,.text-input,.select{width:100%;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--text);outline:none;padding:12px 13px;transition:border .15s}.textarea{min-height:180px;resize:vertical;line-height:1.55}.textarea:focus,.text-input:focus,.select:focus{border-color:var(--green)}.textarea::placeholder,.text-input::placeholder{color:var(--faint)}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.small-label{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.text-input,.select{height:37px;font-size:12px;padding:0 10px}.analyze-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}.hint{font-size:11px;color:var(--faint);line-height:1.5}.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:0 -19px 18px;padding:0 19px}.tab{border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);height:37px;padding:0 12px;font-size:12px}.tab.active{border-color:var(--green);color:var(--text);font-weight:600}.dropzone{border:1px dashed var(--line);border-radius:8px;min-height:175px;display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;background:var(--bg);transition:.15s}.dropzone.dragover{border-color:var(--green);background:#78d6a10b}.drop-inner{max-width:360px}.upload-icon{width:32px;height:32px;color:var(--green);margin:0 auto 10px}.dropzone h3{font:600 13px 'Manrope',sans-serif;margin:0}.dropzone p{font-size:11px;color:var(--muted);line-height:1.5;margin:6px 0 12px}.file-status{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.5}.result-panel{min-height:320px}.result-blank{min-height:320px}.result-ready{padding:19px}.result-label{font:700 24px 'Manrope',sans-serif}.result-label.positive{color:var(--green)}.result-label.negative{color:var(--red)}.result-label.neutral{color:var(--amber)}.result-item{display:grid;grid-template-columns:100px 1fr;gap:9px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}.result-item:last-child{border-bottom:0}.result-key{color:var(--muted)}.confidence-row{display:flex;align-items:center;gap:8px}.confidence-track{height:5px;flex:1;background:var(--surface-2);border-radius:9px;overflow:hidden}.confidence-fill{height:100%;background:var(--green);border-radius:9px}.result-note{margin-top:13px;color:var(--faint);font-size:11px;line-height:1.5}.progress-wrap{padding:19px}.progress-steps{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:10px}
+    .toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:13px 15px;border-bottom:1px solid var(--line)}.search-wrap{flex:1;min-width:190px;position:relative}.search-wrap input{padding-left:32px}.search-wrap svg{position:absolute;left:10px;top:10px;width:15px;height:15px;stroke:var(--faint);fill:none;stroke-width:1.8}.filter-select{height:34px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--muted);padding:0 9px;font-size:11px}.comment-quote{border-left:2px solid var(--line);padding-left:11px;max-width:380px;line-height:1.45}.confidence-pill{font:11px 'DM Mono',monospace;color:var(--muted)}.correction-select{height:27px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--muted);font-size:10px}.insights-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.82fr);gap:17px}.summary-copy{font-size:14px;line-height:1.7;color:var(--muted)}.summary-copy strong{color:var(--text)}.quote-list{display:grid;gap:9px}.quote-item{border-left:2px solid var(--line);padding:7px 10px;font-size:12px;color:var(--muted);line-height:1.5}.quote-item .sentiment-chip{margin-right:7px}.ask-panel{margin-top:17px}.ask-form{display:flex;gap:8px}.ask-form input{flex:1;min-width:0}.ask-response{padding:12px;margin-top:12px;background:var(--surface-2);border-radius:7px;color:var(--muted);font-size:12px;line-height:1.6;white-space:pre-wrap}.ask-response:empty{display:none}.report-paper{padding:26px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}.report-paper h2{font:700 19px 'Manrope',sans-serif;margin:0}.report-paper .report-meta{color:var(--faint);font:11px 'DM Mono',monospace;margin:7px 0 20px}.report-section{padding:15px 0;border-top:1px solid var(--line)}.report-section h3{font:650 12px 'Manrope',sans-serif;margin:0 0 8px}.report-section p{color:var(--muted);font-size:12px;line-height:1.6;margin:0}.notice{border:1px solid #e3bd7240;background:#e3bd720c;color:var(--amber);border-radius:7px;padding:10px 12px;font-size:11px;line-height:1.5}.mobile-nav{display:none}
+    @media(max-width:1100px){.main{padding:0 22px 38px}.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.metric:nth-child(3){border-right:0}.metric:nth-child(n+4){border-top:1px solid var(--line)}.grid-main,.lower-grid,.analyze-grid,.insights-grid{grid-template-columns:1fr}.sentiment-layout{min-height:200px}.result-panel{min-height:0}}
+    @media(max-width:720px){.app{display:block}.sidebar{display:none}.main{padding:0 14px 86px}.topbar{height:58px}.date-stamp{display:none}.page-head{padding:23px 0 17px;align-items:flex-start}.page-head h1{font-size:22px}.page-head p{font-size:12px}.page-head .badge{display:none}.top-actions .button{height:33px;padding:0 9px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:13px}.metric{padding:13px 14px;border-right:1px solid var(--line)!important;border-top:1px solid var(--line)}.metric:nth-child(-n+2){border-top:0}.metric:nth-child(2n){border-right:0!important}.metric:last-child{grid-column:span 2;border-right:0!important}.metric-value{font-size:20px}.grid-main,.lower-grid{gap:12px;margin-top:12px}.panel-head{padding:13px 14px}.panel-body{padding:14px}.sentiment-layout{gap:18px;min-height:175px}.donut{width:140px;height:140px}.donut:after{inset:21px}.donut-total{font-size:23px}.legend{min-width:105px;gap:12px}.data-table th,.data-table td{padding:10px}.form-row{grid-template-columns:1fr}.analyze-actions{align-items:flex-start;flex-direction:column}.analyze-actions .button{width:100%}.tabs{overflow:auto}.tab{white-space:nowrap;padding:0 10px}.mobile-nav{position:fixed;display:flex;z-index:5;bottom:0;left:0;right:0;height:62px;background:var(--sidebar);border-top:1px solid var(--line);justify-content:space-around;padding-bottom:env(safe-area-inset-bottom)}.mobile-nav button{border:0;background:transparent;color:var(--faint);display:grid;align-content:center;justify-items:center;gap:4px;font-size:9px;min-width:58px}.mobile-nav button.active{color:var(--green)}.mobile-nav svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.ask-form{flex-direction:column}.comment-cell{max-width:230px}.page-head .button{flex:none}}
+    @media print{.sidebar,.topbar,.mobile-nav,.page-head .button,.toolbar,.no-print{display:none!important}.app{display:block}.main{padding:0}.page-head{padding-top:0}.panel,.report-paper{break-inside:avoid;background:white;color:#222;border-color:#ddd}.report-paper p,.summary-copy{color:#333}}
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h4l2.2-6 4.1 11 2.2-6H21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="brand-name">Pulse<span>Scope</span></div></div>
+      <div class="workspace-label">Workspace</div>
+      <nav class="nav" id="nav">
+        <button data-view="overview" class="active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="11" width="7" height="10" rx="1"/><rect x="3" y="14" width="8" height="7" rx="1"/></svg><span class="nav-label">Overview</span></button>
+        <button data-view="analyze"><svg viewBox="0 0 24 24"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1"/><circle cx="12" cy="12" r="4"/></svg><span class="nav-label">Analyze</span></button>
+        <button data-view="comments"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg><span class="nav-label">Comments</span><span id="navCount" class="empty-icon"></span></button>
+        <button data-view="insights"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h17M8 15l3-4 3 2 5-7"/><circle cx="19" cy="6" r="1"/></svg><span class="nav-label">Insights & Ask</span></button>
+        <button data-view="report"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8m-8 4h8"/></svg><span class="nav-label">Report</span></button>
+      </nav>
+      <div class="side-spacer"></div>
+      <div class="model-state"><div class="state-top"><span class="state-dot" id="modelDot"></span><span id="modelState">Model not loaded</span></div><p class="state-caption" id="modelCaption">Runs privately in this browser. First analysis downloads the model.</p></div>
+      <div class="side-bottom"><button id="themeButton" class="theme-button"><span class="theme-left"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span>Light appearance</span></span><span class="theme-switch" id="themeSwitch"></span></button></div>
+    </aside>
+    <main class="main">
+      <header class="topbar"><div class="crumb"><span>PulseScope</span><span> / </span><b id="crumbTitle">Overview</b></div><div class="top-actions"><span class="date-stamp" id="today"></span><button class="button subtle" id="topTheme" title="Toggle light or dark appearance"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2"/></svg><span class="theme-short">Theme</span></button><button class="button" id="exportButton" title="Export analyzed comments as CSV"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5 5 5 5-5m-5 5V3"/></svg>Export CSV</button></div></header>
+      <div class="page" id="view"></div>
+    </main>
+    <nav class="mobile-nav" id="mobileNav"><button data-view="overview" class="active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="11" width="7" height="10" rx="1"/><rect x="3" y="14" width="8" height="7" rx="1"/></svg>Overview</button><button data-view="analyze"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v8m-4-4h8"/></svg>Analyze</button><button data-view="comments"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>Comments</button><button data-view="insights"><svg viewBox="0 0 24 24"><path d="M4 19V5m0 14h17M8 15l3-4 3 2 5-7"/></svg>Ask</button><button data-view="report"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Report</button></nav>
+  </div>
+  <script type="module">
+    const MODEL_ID = 'Xenova/twitter-roberta-base-sentiment-latest';
+    const MODEL_LABEL = 'Twitter-RoBERTa sentiment';
+    const $ = (selector, root=document) => root.querySelector(selector);
+    const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    let records = [];
+    let currentView = 'overview';
+    let activeFilter = 'all';
+    let sentimentPipe = null;
+    let isAnalyzing = false;
+    let reviewThreshold = 0.65;
+    const emojiRegex = /\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic})*/gu;
+    const theme = localStorage.getItem('pulsescope-theme') || 'dark';
+    document.documentElement.dataset.theme = theme;
+    $('#today').textContent = new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',year:'numeric'}).format(new Date());
+    updateThemeControl();
+
+    const icon = (path) => `<svg viewBox="0 0 24 24" aria-hidden="true">${path}</svg>`;
+    const sentimentClass = value => value.toLowerCase();
+    const sentiments = ['positive','neutral','negative'];
+    const tally = () => sentiments.reduce((acc,label) => (acc[label]=records.filter(item=>item.corrected||item.sentiment===label).length,acc),{});
+    const sentimentOf = item => item.corrected || item.sentiment;
+    const percent = (n,total) => total ? `${(n/total*100).toFixed(1)}%` : '0%';
+    const confidenceAverage = () => records.length ? records.reduce((sum,item)=>sum+item.confidence,0)/records.length : 0;
+    const sentimentChip = label => `<span class="sentiment-chip ${sentimentClass(label)}">${esc(label)}</span>`;
+    const emptyMarkup = (title,copy,button=true) => `<div class="empty"><div class="empty-mark">${icon('<path d="M3 12h4l2.2-6 4.1 12 2.2-6H21"/>')}</div><h2>${title}</h2><p>${copy}</p>${button?'<button class="button primary" data-go-analyze>Start analysis</button>':''}</div>`;
+
+    function setModelState(state, message='') {
+      const labels={idle:'Model not loaded',loading:'Loading model',ready:'Model ready',error:'Model unavailable'};
+      $('#modelState').textContent=labels[state] || state;
+      $('#modelCaption').textContent=message || (state==='ready'?'In-browser inference · No comments leave this device.':'Runs privately in this browser. First analysis downloads the model.');
+      $('#modelDot').style.background=state==='ready'?'var(--green)':state==='error'?'var(--red)':state==='loading'?'var(--blue)':'var(--amber)';
+    }
+    function updateThemeControl(){
+      const light=document.documentElement.dataset.theme==='light';
+      $('#themeSwitch')?.classList.toggle('on',light);
+      const label=$('.theme-left span:last-child'); if(label) label.textContent=light?'Dark appearance':'Light appearance';
+    }
+    function toggleTheme(){
+      const next=document.documentElement.dataset.theme==='dark'?'light':'dark';
+      document.documentElement.dataset.theme=next; localStorage.setItem('pulsescope-theme',next); updateThemeControl();
+      renderView();
+    }
+    $('#themeButton').addEventListener('click',toggleTheme); $('#topTheme').addEventListener('click',toggleTheme);
+    $('#exportButton').addEventListener('click',exportCsv);
+
+    function pageHeader(title,description,action='') { return `<div class="page-head"><div><div class="eyebrow">Sentiment workspace</div><h1>${title}</h1><p>${description}</p></div>${action}</div>`; }
+    function renderOverview(){
+      const counts=tally(); const total=records.length;
+      const action=`<button class="button primary" data-go-analyze>${icon('<circle cx="12" cy="12" r="9"/><path d="M12 8v8m-4-4h8"/>')} Analyze comments</button>`;
+      if(!total) return `${pageHeader('Overview','Understand the tone of real comments, at a glance.',action)}${emptyMarkup('No sentiment data yet.','Analyze comments you provide to build your overview. Nothing is preloaded or invented.')}`;
+      const p=counts.positive/total*100, n=counts.neutral/total*100, m=counts.negative/total*100;
+      const posScore=records.filter(i=>sentimentOf(i)==='positive').length;
+      const net=((posScore-counts.negative)/total*100).toFixed(0);
+      const emojiMap=new Map(); records.forEach(item=>(item.emojis||[]).forEach(e=>emojiMap.set(e,(emojiMap.get(e)||0)+1)));
+      const emojiLine=[...emojiMap.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5).map(([e,c])=>`${e} ${c}`).join('  ·  ');
+      return `${pageHeader('Overview','A clear read on the comments you have analyzed.',action)}
+        <section class="metrics">
+          <div class="metric"><div class="metric-label">Comments analyzed</div><div class="metric-value">${total}</div><div class="metric-note">Current session</div></div>
+          <div class="metric"><div class="metric-label">Positive</div><div class="metric-value green">${percent(counts.positive,total)}</div><div class="metric-note">${counts.positive} comments</div></div>
+          <div class="metric"><div class="metric-label">Neutral</div><div class="metric-value amber">${percent(counts.neutral,total)}</div><div class="metric-note">${counts.neutral} comments</div></div>
+          <div class="metric"><div class="metric-label">Negative</div><div class="metric-value red">${percent(counts.negative,total)}</div><div class="metric-note">${counts.negative} comments</div></div>
+          <div class="metric"><div class="metric-label">Avg. confidence</div><div class="metric-value">${(confidenceAverage()*100).toFixed(1)}%</div><div class="metric-note">Model estimate, not certainty</div></div>
+        </section>
+        <div class="grid-main">
+          <section class="panel"><div class="panel-head"><div><div class="panel-title">Sentiment breakdown</div><div class="panel-subtitle">Based on ${total} analyzed ${total===1?'comment':'comments'}</div></div><span class="badge"><span class="badge-dot" style="background:var(--green)"></span>Actual results</span></div>
+          <div class="panel-body"><div class="sentiment-layout"><div class="donut" style="background:conic-gradient(var(--green) 0 ${p}%,var(--amber) ${p}% ${p+n}%,var(--red) ${p+n}% 100%)" role="img" aria-label="Sentiment: ${counts.positive} positive, ${counts.neutral} neutral, ${counts.negative} negative"><div class="donut-center"><div class="donut-total">${total}</div><div class="donut-label">comments</div></div></div><div class="legend">${[['positive','Positive',counts.positive],['neutral','Neutral',counts.neutral],['negative','Negative',counts.negative]].map(([key,label,count])=>`<div class="legend-row"><span class="legend-dot" style="background:var(--${key==='positive'?'green':key==='negative'?'red':'amber'})"></span><span class="legend-name">${label}</span><span class="legend-count">${count} · ${percent(count,total)}</span></div>`).join('')}</div></div></div></section>
+          <section class="panel"><div class="panel-head"><div><div class="panel-title">Distribution</div><div class="panel-subtitle">Share of analyzed comments</div></div></div><div class="panel-body"><div class="dist-list">${[['Positive',counts.positive,'positive'],['Neutral',counts.neutral,'neutral'],['Negative',counts.negative,'negative']].map(([label,count,key])=>`<div><div class="dist-head"><span>${label}</span><span>${count} · ${percent(count,total)}</span></div><div class="track"><div class="fill ${key}" style="width:${count/total*100}%"></div></div></div>`).join('')}</div><div class="notice" style="margin-top:20px">Overall balance: ${net>0?`${net}% more positive than negative`:`${Math.abs(net)}% more negative than positive`}. Calculated from this session only.</div></div></section>
+        </div>
+        <div class="lower-grid"><section class="panel"><div class="panel-head"><div><div class="panel-title">Recent comments</div><div class="panel-subtitle">Latest analyzed in this session</div></div><button class="button subtle" data-go-comments>View all</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Comment</th><th>Sentiment</th><th>Confidence</th></tr></thead><tbody>${records.slice(-5).reverse().map(item=>`<tr><td class="comment-cell">${esc(item.text)}</td><td>${sentimentChip(sentimentOf(item))}</td><td class="muted-cell">${(item.confidence*100).toFixed(1)}%</td></tr>`).join('')}</tbody></table></div></section>
+        <section class="panel"><div class="panel-head"><div><div class="panel-title">Emoji pulse</div><div class="panel-subtitle">Detected in the analyzed comments</div></div></div><div class="panel-body">${emojiLine?`<div style="font-size:21px;line-height:1.9">${esc(emojiLine)}</div><div class="panel-subtitle" style="margin-top:8px">${[...emojiMap.values()].reduce((a,b)=>a+b,0)} detected emoji uses</div>`:`<div class="empty small"><div class="empty-icon">No emojis found</div><p>Comments with emojis will appear here.</p></div>`}</div></section></div>`;
+    }
+    function renderAnalyze(){
+      return `${pageHeader('Analyze comments','Paste comments or upload a file. Analysis runs on this device.')}
+        <div class="analyze-grid"><section class="panel form-panel"><div class="tabs"><button class="tab active" data-tab="paste">Paste text</button><button class="tab" data-tab="upload">Upload files</button></div>
+          <div id="pastePanel"><label class="field-label" for="commentInput">Comments <span class="field-hint" id="charCount">0 characters</span></label><textarea id="commentInput" class="textarea" placeholder="Paste a comment or a list of comments. Put each comment on a new line..."></textarea><div class="form-row"><label><span class="small-label">Source (optional)</span><input id="sourceInput" class="text-input" placeholder="YouTube, restaurant review, any source"></label><label><span class="small-label">Confidence review threshold</span><select id="thresholdInput" class="select"><option value="0.6">60% · Review below</option><option value="0.65" selected>65% · Review below</option><option value="0.7">70% · Review below</option></select></label></div><div class="analyze-actions"><span class="hint">Separate multiple comments with a new line. Your text stays in this browser.</span><button id="analyzeText" class="button primary">Analyze comments ${icon('<path d="M3 12h4l2.2-6 4.1 12 2.2-6H21"/>')}</button></div></div>
+          <div id="uploadPanel" hidden><div class="dropzone" id="dropzone"><div class="drop-inner"><svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m-5 5 5-5 5 5"/><path d="M20 16.5v2A1.5 1.5 0 0 1 18.5 20h-13A1.5 1.5 0 0 1 4 18.5v-2"/></svg><h3>Drop a file here, or browse</h3><p>CSV, TXT, PDF, DOCX, JPG, PNG, or WEBP. Images are read with OCR. Your files stay in your browser.</p><button class="button" id="browseFiles">Choose file</button><input id="fileInput" type="file" accept=".csv,.txt,.md,.pdf,.docx,.jpg,.jpeg,.png,.webp,text/csv,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,image/webp" multiple hidden></div></div>
+            <div id="fileStatus" class="file-status" aria-live="polite">CSV files use the selected text column; one comment is analyzed per row.</div><div id="csvColumnWrap" style="margin-top:13px" hidden><label class="small-label" for="csvColumn">Comment column</label><select id="csvColumn" class="select"></select></div><label class="field-label" for="fileText" style="margin-top:17px">Extracted text <span class="field-hint">Review or edit before analysis</span></label><textarea id="fileText" class="textarea" style="min-height:145px" placeholder="Uploaded text will appear here..."></textarea><div class="form-row"><label><span class="small-label">Source (optional)</span><input id="fileSource" class="text-input" placeholder="Any platform or review source"></label><label><span class="small-label">Confidence review threshold</span><select id="fileThreshold" class="select"><option value="0.6">60% · Review below</option><option value="0.65" selected>65% · Review below</option><option value="0.7">70% · Review below</option></select></label></div><div class="analyze-actions"><span class="hint">No database. Refreshing clears this session.</span><button id="analyzeFile" class="button primary">Analyze extracted text</button></div>
+          </div>
+        </section>
+        <section class="panel result-panel"><div class="panel-head"><div><div class="panel-title">Analysis result</div><div class="panel-subtitle">Model prediction with confidence</div></div></div><div id="resultContent" class="result-blank">${emptyMarkup('Ready when you are','Your analysis will appear here. The first run downloads the sentiment model.')}</div></section></div>`;
+    }
+    function commentRows(items){
+      return items.map(item=>`<tr><td><div class="comment-quote">${esc(item.text)}</div>${item.corrected?'<div class="panel-subtitle" style="margin:5px 0 0 11px">Human-corrected</div>':''}</td><td>${sentimentChip(sentimentOf(item))}</td><td><span class="confidence-pill">${(item.confidence*100).toFixed(1)}%</span></td><td>${item.emojis.length?esc(item.emojis.join(' ')):'<span class="muted-cell">—</span>'}</td><td class="muted-cell">${esc(item.source||'Not specified')}</td><td class="muted-cell">${new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}).format(item.date)}</td><td><select class="correction-select" data-correct-id="${item.id}" aria-label="Correct sentiment"><option value="">Correct…</option>${sentiments.map(s=>`<option value="${s}" ${item.corrected===s?'selected':''}>${s}</option>`).join('')}<option value="reset">Reset AI label</option></select></td></tr>`).join('');
+    }
+    function renderComments(){
+      if(!records.length) return `${pageHeader('Comments','Search, filter, and correct individual classifications.')}${emptyMarkup('Your comments will appear here.','Analyze real comments first. You can filter negative feedback and review low-confidence results.')}`;
+      return `${pageHeader('Comments','Search, filter, and correct individual classifications.',`<button class="button" id="needsReview">Needs review</button>`)}<section class="panel"><div class="toolbar"><label class="search-wrap">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>')}<input id="commentSearch" class="text-input" placeholder="Search comments…"></label><select id="sentimentFilter" class="filter-select"><option value="all">All sentiment</option><option value="positive">Positive</option><option value="neutral">Neutral</option><option value="negative">Negative</option></select><select id="confidenceFilter" class="filter-select"><option value="all">Any confidence</option><option value="review">Needs review</option><option value="high">65% or higher</option></select><span class="badge" id="resultCount"></span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Comment</th><th>Sentiment</th><th>Confidence</th><th>Emoji</th><th>Source</th><th>Analyzed</th><th>Correction</th></tr></thead><tbody id="commentRows"></tbody></table></div></section>`;
+    }
+    function renderInsights(){
+      if(!records.length) return `${pageHeader('Insights & Ask','Ask questions about the comments you analyzed.')}${emptyMarkup('Insights need real comments.','After analysis, ask a question in your own words. Answers are grounded only in this session’s data.')}`;
+      const counts=tally(),total=records.length,low=records.filter(i=>i.confidence<.65).length;
+      const strongest=sentiments.map(s=>[s,counts[s]]).sort((a,b)=>b[1]-a[1])[0];
+      const excerpts=(s)=>records.filter(i=>sentimentOf(i)===s).slice(0,3);
+      return `${pageHeader('Insights & Ask','A concise readout of the analyzed comments, with room for your questions.')}
+        <div class="insights-grid"><section class="panel"><div class="panel-head"><div><div class="panel-title">Session summary</div><div class="panel-subtitle">Computed from ${total} comments · no historical comparison</div></div></div><div class="panel-body"><div class="summary-copy">The most common classification is <strong>${strongest[0]}</strong> (${strongest[1]} of ${total}, ${percent(strongest[1],total)}). ${counts.positive} comments are positive, ${counts.neutral} neutral, and ${counts.negative} negative. Average model confidence is <strong>${(confidenceAverage()*100).toFixed(1)}%</strong>${low?`; ${low} ${low===1?'comment is':'comments are'} below the 65% review threshold.`:'.'} These are model estimates, not verified facts.</div><div class="dist-list" style="margin-top:20px">${[['Positive',counts.positive,'positive'],['Neutral',counts.neutral,'neutral'],['Negative',counts.negative,'negative']].map(([label,count,key])=>`<div><div class="dist-head"><span>${label}</span><span>${count} · ${percent(count,total)}</span></div><div class="track"><div class="fill ${key}" style="width:${count/total*100}%"></div></div></div>`).join('')}</div></div></section>
+          <section class="panel"><div class="panel-head"><div><div class="panel-title">Representative comments</div><div class="panel-subtitle">Examples from the current dataset</div></div></div><div class="panel-body"><div class="quote-list">${['positive','negative','neutral'].flatMap(s=>excerpts(s).slice(0,1).map(item=>`<div class="quote-item">${sentimentChip(s)}${esc(item.text)}</div>`)).join('')||'<div class="panel-subtitle">No comments available.</div>'}</div></div></section></div>
+        <section class="panel ask-panel"><div class="panel-head"><div><div class="panel-title">Ask Pulse</div><div class="panel-subtitle">Ask a question in your own words. Answers use only this session.</div></div><span class="badge"><span class="badge-dot" style="background:var(--green)"></span>${total} comments in scope</span></div><div class="panel-body"><form id="askForm" class="ask-form"><input id="askInput" class="text-input" placeholder="Ask anything relevant to these comments…" autocomplete="off"><button class="button primary" type="submit">Ask Pulse</button></form><div class="ask-response" id="askResponse" aria-live="polite"></div><div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:11px"><button class="button subtle ask-suggestion" data-question="What are the negative comments saying?">Summarize negative feedback</button><button class="button subtle ask-suggestion" data-question="What percentage of comments are positive?">Positive share</button><button class="button subtle ask-suggestion" data-question="Which emojis appear in positive comments?">Emoji usage</button></div></div></section>`;
+    }
+    function renderReport(){
+      if(!records.length) return `${pageHeader('Report','Generate a printable summary or export the underlying comments.')}${emptyMarkup('No report data yet.','Analyze comments to create a report based on real results.')}`;
+      const counts=tally(),total=records.length;
+      const emojiMap=new Map();records.forEach(i=>(i.emojis||[]).forEach(e=>emojiMap.set(e,(emojiMap.get(e)||0)+1)));
+      const emojiText=[...emojiMap.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8).map(([e,c])=>`${e} (${c})`).join(', ')||'No emojis detected';
+      return `${pageHeader('Report','A printable snapshot of this session.',`<button class="button primary" id="printReport">${icon('<path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/>')} Print / Save PDF</button>`)}<article class="report-paper"><h2>Sentiment insights report</h2><div class="report-meta">Generated ${new Intl.DateTimeFormat(undefined,{dateStyle:'long',timeStyle:'short'}).format(new Date())} · Current browser session</div><div class="report-section"><h3>Analysis overview</h3><p>${total} comments analyzed using ${MODEL_LABEL}. The sentiment model ran in this browser. No historic comparisons or external data are included.</p></div><div class="report-section"><h3>Sentiment breakdown</h3><p>Positive: ${counts.positive} (${percent(counts.positive,total)}) · Neutral: ${counts.neutral} (${percent(counts.neutral,total)}) · Negative: ${counts.negative} (${percent(counts.negative,total)}). Average confidence: ${(confidenceAverage()*100).toFixed(1)}%.</p></div><div class="report-section"><h3>Emoji insights</h3><p>${esc(emojiText)}</p></div><div class="report-section"><h3>Representative findings</h3><p>${esc(records.filter(i=>sentimentOf(i)==='positive').slice(0,1).map(i=>`Positive example: “${i.text}”`).join(' ')||'No positive comments in this session.')} ${esc(records.filter(i=>sentimentOf(i)==='negative').slice(0,1).map(i=>`Negative example: “${i.text}”`).join(' ')||'No negative comments in this session.')}</p></div><div class="report-section"><h3>Methodology & limitations</h3><p>Sentiment labels are predictions from ${MODEL_LABEL}; confidence reflects the model’s estimated probability, not guaranteed correctness. Emojis are preserved in the analyzed text. No topic extraction, dates, or historic trends are inferred. Human corrections are available in Comments.</p></div></article>`;
+    }
+    function renderView(){
+      const names={overview:'Overview',analyze:'Analyze',comments:'Comments',insights:'Insights & Ask',report:'Report'};
+      $('#crumbTitle').textContent=names[currentView];
+      $('#view').innerHTML=({overview:renderOverview,analyze:renderAnalyze,comments:renderComments,insights:renderInsights,report:renderReport}[currentView])();
+      $$('#nav button,#mobileNav button').forEach(button=>button.classList.toggle('active',button.dataset.view===currentView));
+      $('#navCount').textContent=records.length?records.length:'';
+      bindPageActions();
+      if(currentView==='comments'&&records.length)filterComments();
+    }
+    function setView(view){currentView=view;renderView();window.scrollTo({top:0,behavior:'smooth'});}
+    function bindPageActions(){
+      if($('#thresholdInput'))$('#thresholdInput').value=String(reviewThreshold);
+      if($('#fileThreshold'))$('#fileThreshold').value=String(reviewThreshold);
+      $$('[data-go-analyze]').forEach(b=>b.addEventListener('click',()=>setView('analyze')));
+      $$('[data-go-comments]').forEach(b=>b.addEventListener('click',()=>setView('comments')));
+      $$('#nav button,#mobileNav button').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+      $$('.tab').forEach(tab=>tab.addEventListener('click',()=>{
+        $$('.tab').forEach(t=>t.classList.toggle('active',t===tab));
+        const upload=tab.dataset.tab==='upload';$('#pastePanel').hidden=upload;$('#uploadPanel').hidden=!upload;
+      }));
+      const commentInput=$('#commentInput'); if(commentInput) commentInput.addEventListener('input',()=>$('#charCount').textContent=`${commentInput.value.length.toLocaleString()} characters`);
+      $('#thresholdInput')?.addEventListener('change',e=>{reviewThreshold=Number(e.target.value)});
+      $('#fileThreshold')?.addEventListener('change',e=>{reviewThreshold=Number(e.target.value)});
+      $('#analyzeText')?.addEventListener('click',()=>analyzeText(commentInput.value,$('#sourceInput').value,$('#resultContent')));
+      $('#browseFiles')?.addEventListener('click',()=>$('#fileInput').click());
+      $('#fileInput')?.addEventListener('change',e=>processFiles([...e.target.files]));
+      const drop=$('#dropzone');
+      drop?.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('dragover')});
+      drop?.addEventListener('dragleave',()=>drop.classList.remove('dragover'));
+      drop?.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('dragover');processFiles([...e.dataTransfer.files])});
+      $('#analyzeFile')?.addEventListener('click',()=>analyzeText($('#fileText').value,$('#fileSource').value,$('#resultContent')));
+      $('#commentSearch')?.addEventListener('input',filterComments);
+      $('#sentimentFilter')?.addEventListener('change',filterComments);
+      $('#confidenceFilter')?.addEventListener('change',filterComments);
+      $('#needsReview')?.addEventListener('click',()=>{ $('#confidenceFilter').value='review'; filterComments(); });
+      $('#commentRows')?.addEventListener('change',e=>{
+        const select=e.target.closest('[data-correct-id]');if(!select)return;
+        const item=records.find(i=>i.id===select.dataset.correctId);if(!item)return;
+        item.corrected=select.value==='reset'?null:select.value||null;renderView();
+      });
+      $('#askForm')?.addEventListener('submit',e=>{e.preventDefault();answerQuestion($('#askInput').value,$('#askResponse'))});
+      $$('.ask-suggestion').forEach(b=>b.addEventListener('click',()=>{ $('#askInput').value=b.dataset.question;answerQuestion(b.dataset.question,$('#askResponse')); }));
+      $('#printReport')?.addEventListener('click',()=>window.print());
+      $('#csvColumn')?.addEventListener('change',()=>{if(window.pendingCsv)$('#fileText').value=window.pendingCsv.rows.map(r=>r[$('#csvColumn').value]||'').filter(Boolean).join('\n')});
+    }
+    function filterComments(){
+      const q=($('#commentSearch')?.value||'').toLowerCase();const sent=$('#sentimentFilter')?.value||'all';const conf=$('#confidenceFilter')?.value||'all';
+      const threshold=reviewThreshold;
+      const items=records.filter(i=>`${i.text} ${i.source}`.toLowerCase().includes(q)&&(sent==='all'||sentimentOf(i)===sent)&&(conf==='all'||(conf==='review'?i.confidence<threshold:i.confidence>=threshold))).slice().reverse();
+      $('#commentRows').innerHTML=commentRows(items);$('#resultCount').textContent=`${items.length} / ${records.length}`;
+    }
+    async function loadPipeline(){
+      if(sentimentPipe)return sentimentPipe;
+      setModelState('loading','Downloading model files from Hugging Face. This can take a few minutes on first use.');
+      const result=$('#resultContent');
+      if(result)result.innerHTML=`<div class="progress-wrap"><div class="state-top"><span class="state-dot" style="background:var(--blue)"></span>Preparing the sentiment model</div><p class="state-caption">The model downloads once to your browser cache. No comments are sent to a server.</p><div class="track" style="margin-top:16px"><div class="fill positive" style="width:38%;animation:pulse 1.2s ease-in-out infinite alternate"></div></div></div>`;
+      try{
+        const {pipeline,env}=await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.2');
+        env.allowLocalModels=false;
+        sentimentPipe=await pipeline('text-classification',MODEL_ID,{progress_callback:(progress)=>{
+          if(progress.status==='progress'&&result){const pct=Number.isFinite(progress.progress)?Math.round(progress.progress):0;result.innerHTML=`<div class="progress-wrap"><div class="state-top"><span class="state-dot" style="background:var(--blue)"></span>Downloading sentiment model</div><p class="state-caption">${esc(progress.file||'Model files')} · ${pct}%</p><div class="track" style="margin-top:16px"><div class="fill positive" style="width:${pct}%"></div></div></div>`;}
+        }});
+        setModelState('ready');return sentimentPipe;
+      }catch(error){sentimentPipe=null;setModelState('error','Check your internet connection, then try again. Model download failed.');throw new Error('The sentiment model could not be loaded. Check your internet connection and try again.');}
+    }
+    function normalizeOutput(output){
+      const rows=Array.isArray(output)?output:[output];
+      const best=rows.filter(Boolean).sort((a,b)=>b.score-a.score)[0];
+      if(!best||typeof best.score!=='number')throw new Error('The model returned an unexpected result.');
+      let label=String(best.label).toLowerCase();
+      if(label.includes('label_')){const index=Number(label.split('_').pop());label=({0:'negative',1:'neutral',2:'positive'})[index]||label;}
+      if(!sentiments.includes(label))throw new Error(`Unsupported model label: ${best.label}`);
+      return {sentiment:label,confidence:best.score};
+    }
+    async function analyzeText(rawText,source,resultNode){
+      if(isAnalyzing)return;
+      const texts=String(rawText||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+      if(!texts.length){resultNode.innerHTML=`<div class="empty result-blank"><h2>Add a comment first</h2><p>Enter at least one non-empty comment to analyze.</p></div>`;return;}
+      isAnalyzing=true;
+      try{
+        const classifier=await loadPipeline();
+        const added=[];
+        for(let i=0;i<texts.length;i++){
+          resultNode.innerHTML=`<div class="progress-wrap"><div class="state-top"><span class="state-dot" style="background:var(--blue)"></span>Analyzing comment ${i+1} of ${texts.length}</div><p class="state-caption">Running ${MODEL_LABEL}. Keep this page open.</p><div class="track" style="margin-top:16px"><div class="fill positive" style="width:${Math.round((i/texts.length)*100)}%"></div></div></div>`;
+          const raw=await classifier(texts[i],{topk:null});
+          const prediction=normalizeOutput(raw);
+          const emojis=texts[i].match(emojiRegex)||[];
+          const item={id:crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`,text:texts[i],source:source.trim(),date:new Date(),emojis,sentiment:prediction.sentiment,confidence:prediction.confidence,corrected:null};
+          records.push(item);added.push(item);
+        }
+        const last=added[added.length-1];
+        resultNode.innerHTML=`<div class="result-ready"><div class="eyebrow">Model prediction</div><div class="result-label ${last.sentiment}">${last.sentiment.toUpperCase()}</div><div class="result-item"><span class="result-key">Confidence</span><div class="confidence-row"><div class="confidence-track"><div class="confidence-fill" style="width:${(last.confidence*100).toFixed(1)}%"></div></div><strong>${(last.confidence*100).toFixed(1)}%</strong></div></div><div class="result-item"><span class="result-key">Emojis</span><span>${last.emojis.length?esc(last.emojis.join(' ')):'None detected'}</span></div><div class="result-item"><span class="result-key">Source</span><span>${esc(last.source||'Not specified')}</span></div><div class="result-item"><span class="result-key">Analyzed</span><span>${new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(last.date)}</span></div>${added.length>1?`<div class="notice" style="margin-top:13px">${added.length-1} additional comments analyzed. The most recent result is shown here.</div>`:''}<div class="result-note">Confidence is the model’s estimated probability, not a guarantee of correctness. Correct labels in Comments.</div><button class="button" style="margin-top:14px" id="viewAnalyzed">View comments</button></div>`;
+        $('#viewAnalyzed').addEventListener('click',()=>setView('comments'));
+        setModelState('ready');
+      }catch(error){
+        resultNode.innerHTML=`<div class="empty result-blank"><div class="empty-mark" style="color:var(--red)">!</div><h2>Analysis couldn’t finish</h2><p>${esc(error.message||'Unexpected error. Try again.')}</p><button class="button" id="retryModel">Try again</button></div>`;
+        $('#retryModel').addEventListener('click',()=>analyzeText(rawText,source,resultNode));
+      }finally{isAnalyzing=false;}
+    }
+    function parseCsv(text){
+      const rows=[];let row=[],cell='',quoted=false;
+      for(let i=0;i<text.length;i++){
+        const char=text[i];
+        if(quoted){if(char==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(char==='"')quoted=false;else cell+=char;}
+        else if(char==='"')quoted=true;
+        else if(char===','){row.push(cell);cell='';}
+        else if(char==='\n'){row.push(cell);rows.push(row);row=[];cell='';}
+        else if(char!=='\r')cell+=char;
+      }
+      if(cell.length||row.length){row.push(cell);rows.push(row);}
+      const clean=rows.filter(r=>r.some(v=>v.trim()));if(clean.length<2)throw new Error('CSV needs a header row and at least one data row.');
+      const headers=clean[0].map((h,i)=>h.trim()||`Column ${i+1}`);const data=clean.slice(1).map(values=>Object.fromEntries(headers.map((h,i)=>[h,(values[i]||'').trim()])));
+      return {headers,rows:data};
+    }
+    function inferCsvColumn(headers,rows){
+      const match=headers.find(h=>/comment|review|text|body|message|content|feedback/i.test(h));
+      if(match)return match;
+      return headers.map(h=>[h,rows.reduce((sum,row)=>sum+(row[h]||'').length,0)]).sort((a,b)=>b[1]-a[1])[0]?.[0]||headers[0];
+    }
+    async function extractFile(file){
+      const name=file.name.toLowerCase();
+      if(name.endsWith('.csv')){
+        const parsed=parseCsv(await file.text());window.pendingCsv=parsed;
+        const select=$('#csvColumn');select.innerHTML=parsed.headers.map(h=>`<option value="${esc(h)}">${esc(h)}</option>`).join('');
+        const selected=inferCsvColumn(parsed.headers,parsed.rows);select.value=selected;$('#csvColumnWrap').hidden=false;
+        return parsed.rows.map(row=>row[selected]||'').filter(Boolean).join('\n');
+      }
+      if(name.endsWith('.txt')||name.endsWith('.md'))return await file.text();
+      if(name.endsWith('.pdf')){
+        const pdfjs=await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');
+        pdfjs.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+        const pdf=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise;let pages=[];
+        for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){const page=await pdf.getPage(pageNo);const content=await page.getTextContent();pages.push(content.items.map(item=>item.str).join(' '));}
+        return pages.join('\n');
+      }
+      if(name.endsWith('.docx')){
+        const mammoth=await import('https://esm.sh/mammoth@1.9.0');
+        const result=await mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});return result.value;
+      }
+      if(/\.(jpg|jpeg|png|webp)$/.test(name)){
+        const tesseract=await import('https://esm.sh/tesseract.js@6');
+        const result=await tesseract.recognize(file,'eng',{logger:info=>{if(info.status==='recognizing text')$('#fileStatus').textContent=`Reading image text… ${Math.round((info.progress||0)*100)}%`;}});
+        return result.data.text;
+      }
+      throw new Error(`Unsupported file type: ${file.name}`);
+    }
+    async function processFiles(files){
+      if(!files.length)return;
+      $('#fileStatus').textContent=`Reading ${files.length} file${files.length===1?'':'s'}…`;
+      $('#csvColumnWrap').hidden=true;window.pendingCsv=null;
+      try{
+        const outputs=[];
+        for(const file of files){
+          $('#fileStatus').textContent=`Reading ${file.name}…`;
+          const text=await extractFile(file);
+          if(!text.trim())throw new Error(`No readable text was found in ${file.name}. Scanned PDFs may need OCR from an image upload.`);
+          outputs.push(text.trim());
+        }
+        $('#fileText').value=outputs.join('\n\n');
+        $('#fileStatus').textContent=`Extracted text from ${files.length} file${files.length===1?'':'s'}. Review it below before analysis.`;
+      }catch(error){$('#fileStatus').textContent=error.message||'Could not read this file.';}
+    }
+    function answerQuestion(question,node){
+      const q=question.trim().toLowerCase();if(!q){node.textContent='Enter a question about the current comments.';return;}
+      if(!records.length){node.textContent='There are no analyzed comments in this session yet.';return;}
+      const counts=tally(),total=records.length;
+      const pos=records.filter(i=>sentimentOf(i)==='positive'),neg=records.filter(i=>sentimentOf(i)==='negative'),neu=records.filter(i=>sentimentOf(i)==='neutral');
+      let answer='';
+      if(/percentage|percent|how many|share|breakdown|compare|comparison|distribution/.test(q)) answer=`In this session (${total} comments): positive ${counts.positive} (${percent(counts.positive,total)}), neutral ${counts.neutral} (${percent(counts.neutral,total)}), negative ${counts.negative} (${percent(counts.negative,total)}).`;
+      else if(/confidence|uncertain|review|sure/.test(q)){const low=records.filter(i=>i.confidence<.65);answer=`Average model confidence is ${(confidenceAverage()*100).toFixed(1)}%. ${low.length} of ${total} comments are below 65% confidence.${low.length?` Examples: ${low.slice(0,3).map(i=>`“${i.text}” (${(i.confidence*100).toFixed(1)}%)`).join('; ')}`:''}`;}
+      else if(/emoji|emojis|emoticon/.test(q)){
+        const subset=/positive|good|like/.test(q)?pos:/negative|bad|complain/.test(q)?neg:/neutral/.test(q)?neu:records;
+        const tallyEmoji=new Map();subset.forEach(i=>i.emojis.forEach(e=>tallyEmoji.set(e,(tallyEmoji.get(e)||0)+1)));
+        const list=[...tallyEmoji.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8);
+        answer=list.length?`In ${subset.length} matching comment${subset.length===1?'':'s'}, the most frequent emojis are ${list.map(([e,c])=>`${e} (${c})`).join(', ')}.`:'No emojis appeared in the matching comments.';
+      }
+      else if(/negative|complain|problem|issue|dislike|concern|bad|pain/.test(q)) answer=neg.length?`${neg.length} comments were classified negative (${percent(neg.length,total)}). Examples from the data: ${neg.slice(0,4).map(i=>`“${i.text}”`).join(' · ')}`:'No comments were classified negative in this session.';
+      else if(/positive|praise|like|enjoy|good|love/.test(q)) answer=pos.length?`${pos.length} comments were classified positive (${percent(pos.length,total)}). Examples from the data: ${pos.slice(0,4).map(i=>`“${i.text}”`).join(' · ')}`:'No comments were classified positive in this session.';
+      else if(/neutral|mixed|okay|indifferent/.test(q)) answer=neu.length?`${neu.length} comments were classified neutral (${percent(neu.length,total)}). Examples from the data: ${neu.slice(0,4).map(i=>`“${i.text}”`).join(' · ')}`:'No comments were classified neutral in this session.';
+      else if(/summari|overall|sentiment|customers|people|feedback/.test(q)) answer=`Across ${total} comments, ${counts.positive} are positive, ${counts.neutral} neutral, and ${counts.negative} negative. Average confidence is ${(confidenceAverage()*100).toFixed(1)}%. ${neg.length?`A negative example: “${neg[0].text}”`:pos.length?`A positive example: “${pos[0].text}”`:''}`;
+      else answer='I can answer questions about sentiment counts, positive or negative feedback, confidence, and emoji usage in this session. The current dataset does not provide enough information to answer that question reliably.';
+      node.textContent=answer;
+    }
+    function exportCsv(){
+      if(!records.length){alert('Analyze comments before exporting.');return;}
+      const headers=['comment','sentiment','ai_sentiment','confidence','emojis','source','analyzed_at'];
+      const quote=value=>`"${String(value??'').replace(/"/g,'""')}"`;
+      const lines=[headers.join(','),...records.map(i=>[i.text,sentimentOf(i),i.sentiment,i.confidence.toFixed(4),i.emojis.join(' '),i.source,i.date.toISOString()].map(quote).join(','))];
+      const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));link.download='pulsescope-analysis.csv';link.click();URL.revokeObjectURL(link.href);
+    }
+    document.addEventListener('click',e=>{if(e.target.closest('[data-view]'))return;});
+    renderView();
+  </script>
+  <style>@keyframes pulse{from{opacity:.5}to{opacity:1}}</style>
+</body>
+</html>
